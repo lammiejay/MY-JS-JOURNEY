@@ -11,31 +11,64 @@
 
 
 // Making HTTP requests
-const getTodos = (callback) => {
+const getTodos = (resource) => {
     const request = new XMLHttpRequest();
 
-    // readystatechange tracks the progress of the request
-    request.addEventListener('readystatechange', () => {
-        // console.log(request, request.readyState);
-        if (request.readyState === 4 && request.status === 200) {
-            // console.log(request, request.responseText);
-            const data = JSON.parse(request.responseText)
-            callback(undefined, data);
-        } else if(request.readyState === 4){
-            // console.log("could not fetch the data");
-            callback('could not fetch data', undefined);
-        }
-    });
+    return new Promise((resolve, reject) => {
+        // readystatechange tracks the progress of the request
+        request.addEventListener('readystatechange', () => {
+            if (request.readyState === 4 && request.status === 200) {
+                const data = JSON.parse(request.responseText)
+                resolve(data);
+            } else if(request.readyState === 4){
+                reject('error getting resource')
+            }
+        });
 
-    request.open('GET', 'todos.json');
-    request.send();
+        request.open('GET', resource);
+        request.send();
+
+    })
+
 }
 
-getTodos((err, data) => {
-    console.log('callback fired');
-    if (err) {
-        console.log(err);
-    } else{
-        console.log(data);
-    }
-});
+getTodos('todos/luigi.json').then(data => {
+    console.log('promise resolved:', data)
+}).catch(err => {
+    console.log('promise rejected');
+})
+
+// callback hell
+// getTodos('todos/luigi.json', (err, data) => {
+//         console.log(data);
+//         getTodos('todos/mario.json', (err, data) => {
+//             console.log(data);
+//             getTodos('todos/shaun.json', (err, data) => {
+//                 console.log(data);
+//             });
+//         });
+// });
+
+// promise example
+
+const getSomething = () => {
+
+    return new Promise((resolve, reject) => {
+        // fetch something
+        // resolve('some data'); // if its a success
+        // reject('some error'); // if its an error
+    });
+
+}
+
+// getSomething().then((data) => {
+//     console.log(data);
+// }, (err) => {
+//     console.log(err);
+// });
+
+getSomething().then(data => {
+    console.log(data);
+}).catch(err => {
+    console.log(err)
+})
