@@ -54,10 +54,13 @@ class User {
 }
 
 class Admin extends User {
+    constructor(username, email, title){
+        super(username, email); // gets the username and email from the parent constructor
+        this.title = title;
+    }
+    // function to delete other users
     deleteUser(user){
-        users = users.filter((u) => {
-            return u.username !== user.username;
-        });
+        users = users.filter((u) => u.username !== user.username );
     }
 }
 
@@ -68,13 +71,15 @@ class Admin extends User {
 
 const userOne = new User('Ola', 'lammiejay02@gmail.com'); 
 const userTwo = new User('David', 'Davidthegoat@gmail.com');
-const userThree = new Admin('lammie', 'gbadamide1@gmail.com');
+const userThree = new Admin('lammie', 'gbadamide1@gmail.com', 'lead developer');
 
 // userOne.login().incScore().incScore().logout(); // chaining methods
-console.log(userOne, userTwo, userThree);
+// console.log(userOne, userTwo, userThree);
+console.log(userThree);
 
 let users = [userOne, userTwo, userThree];
-console.log(users);
+// console.log(users);
 
-userThree.deleteUser(userTwo);
-console.log(users);
+// use admin to delete other users
+// userThree.deleteUser(userTwo);
+// console.log(users);
